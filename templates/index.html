@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Pagamentos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f17, #1a102e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .card-custom {
+            background: rgba(25, 25, 40, .95);
+            border: 1px solid #7b2ff7;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(123, 47, 247, .35);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        p {
+            color: #b8b8c5;
+        }
+
+        .form-label {
+            color: #d9d9e6;
+            font-weight: 500;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #24243a;
+            color: white;
+            border: 1px solid #5f3dc4;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #24243a;
+            color: white;
+            border-color: #9d4edd;
+            box-shadow: 0 0 0 .25rem rgba(157, 78, 221, .25);
+        }
+
+        .btn-purple {
+            background: linear-gradient(90deg, #7b2ff7, #a855f7);
+            border: none;
+            font-weight: bold;
+            transition: .3s;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(168, 85, 247, .5);
+            color: white;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #7b2ff7, #a855f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 30px;
+        }
+
+        .alert-ok {
+            background-color: rgba(72, 199, 116, .15);
+            border: 1px solid #48c774;
+            color: #b6f2c9;
+        }
+
+        .alert-erro {
+            background-color: rgba(247, 47, 79, .15);
+            border: 1px solid #f72f4f;
+            color: #ffc2cc;
+        }
+
+        .resumo {
+            background-color: #1c1c30;
+            border: 1px solid #3a3a55;
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: #d9d9e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-custom p-5" style="width: 100%; max-width: 480px;">
+        <div class="icon-circle">💜</div>
+        <h1 class="text-center mb-1">Controle de Pagamentos</h1>
+        <p class="text-center mb-4">Registre seu pagamento mensal</p>
+
+        {% if resultado %}
+        <div class="alert {{ 'alert-ok' if resultado.ok else 'alert-erro' }}" role="alert">
+            {{ resultado.mensagem }}
+        </div>
+        {% endif %}
+
+        {% if resumo %}
+        <div class="resumo mb-4">
+            <strong>Nome:</strong> {{ resumo.nome }}<br>
+            <strong>Referência:</strong> {{ resumo.referencia }}<br>
+            <strong>Valor esperado:</strong> R$ {{ "%.2f"|format(resumo.valor_esperado) }}<br>
+            <strong>Valor pago:</strong> R$ {{ "%.2f"|format(resumo.valor_pago) }}<br>
+            {% if resumo.diferenca > 0 %}
+                <strong>Sobra:</strong> R$ {{ "%.2f"|format(resumo.diferenca) }}<br>
+            {% elif resumo.diferenca < 0 %}
+                <strong>Falta:</strong> R$ {{ "%.2f"|format(resumo.diferenca|abs) }}<br>
+            {% else %}
+                Pagamento exato.<br>
+            {% endif %}
+            <strong>Status:</strong> {{ resumo.status }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <select class="form-select" id="nome" name="nome" required>
+                    <option value="">Selecione</option>
+                    <option value="adrian">Adrian</option>
+                    <option value="andreia">Andreia</option>
+                    <option value="alessandra">Alessandra</option>
+                    <option value="alisson">Alisson</option>
+                    <option value="bryan">Bryan</option>
+                    <option value="cida">Cida</option>
+                    <option value="everton">Everton</option>
+                    <option value="emilly">Emilly</option>
+                    <option value="evillyn">Evillyn</option>
+                    <option value="elizabeth">Elizabeth</option>
+                    <option value="franklin">Franklin</option>
+                    <option value="hellen">Hellen</option>
+                    <option value="jorge">Jorge</option>
+                    <option value="kevin">Kevin</option>
+                    <option value="osvaldo">Osvaldo</option>
+                    <option value="simone">Simone</option>
+                    <option value="silvana">Silvana</option>
+                    <option value="valter">Valter</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="mes" class="form-label">Mês (1-12)</label>
+                <select class="form-select" id="mes" name="mes" required>
+                <option value="">Selecione</option>
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="valor_pago" class="form-label">Valor pago (R$)</label>
+                <input type="number" step="0.01" class="form-control" id="valor_pago" name="valor_pago" required>
+            </div>
+
+            <button type="submit" class="btn btn-purple w-100 py-2">Registrar Pagamento</button>
+        </form>
+    </div>
+</body>
+</html>
