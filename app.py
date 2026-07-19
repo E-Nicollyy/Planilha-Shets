@@ -6,7 +6,7 @@ import requests
 app = Flask(__name__)
 
 # URL do Web App do Google Apps Script (Implantar > Nova implantação > App da Web)
-ENDPOINT = "https://script.google.com/macros/s/AKfycbyMHGBxibfGjYo03Adr8_3CUaWX6p6BVOry6XNhGZp_Lgy-rAZv0lNlrXbGBC2oHc4/exec"
+ENDPOINT = "https://script.google.com/macros/s/AKfycbwV_y-JvgQoch2AxjTX4Tw2tSxhpTNgeqng-ZugTQHIvB0VoQO3mVjDzByHskssdA/exec"
 
 # Valor fixo esperado por mês (regra de negócio da mensalidade)
 VALOR_ESPERADO = 68.0
