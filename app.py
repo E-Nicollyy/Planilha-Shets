@@ -67,5 +67,8 @@ def index():
 
 
 if __name__ == "__main__":
-    # debug=True facilita o desenvolvimento (recarrega sozinho e mostra erros)
-    app.run(debug=True)
+    # Esse bloco só roda quando você executa "python app.py" localmente.
+    # No Render, quem sobe o app é o Gunicorn (comando de start: gunicorn app:app),
+    # então esse trecho nem é executado em produção — pode manter debug=True aqui sem risco.
+    porta = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=porta, debug=True)
